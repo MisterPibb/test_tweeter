@@ -1,10 +1,11 @@
 class PostsController < ApplicationController
   def show
     variable_name = 0
-    @universal_veriable_name = 0 #accessible in view and not just this def
+    @universal_variable_name = 0 #accessible in view and not just this def
 
     @text = "Show"
     @post = Post.find(params[:id])
+    @comments = @post.comments
     # binding.pry # Stops code and continues in console/terminal
   end
   def index

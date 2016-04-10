@@ -1,10 +1,27 @@
+<div class="pull-right">
+  <%= link_to "Add Comment", new_comment_path(post_id: @post.id), class: "btn btn-primary" %>
+</div>
 <h1>
   <%= link_to fa_icon("arrow-left"), posts_path %>
   <%= @text %>
 </h1>
-<div class="media">
-  <div class="media-body">
-  <h4 class="media-heading"><%= @post.user %></h4>
-    <%= @post %>
+<ul class="media-list">
+  <li class="media">
+    <div class="media-body">
+    <h4 class="media-heading"><%= @post.user %></h4>
+      <%= @post %>
+    </div>
+  </li>
+</ul>
+
+<% @comments.each do |comment| %>
+  <div class="media comment">
+    <div class="media-body">
+    <h4 class="media-heading"><%= comment.user %></h4>
+      <%= comment.content %>
+    </div>
+    <div class="pull-right text-muted" style="font-size: 0.8em">
+      Added: <%= comment.created_at.to_formatted_s(:long_ordinal) %>
+    </div>
   </div>
-</div>
+<% end %>
