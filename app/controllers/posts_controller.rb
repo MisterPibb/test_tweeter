@@ -10,7 +10,7 @@ class PostsController < ApplicationController
   end
   def index
     @text = "Index"
-    @posts = Post.all.order(created_at: :desc)
+    @posts = Post.search(params[:search]).order(created_at: :desc)
   end
   def new
     @text = "New"
@@ -20,16 +20,23 @@ class PostsController < ApplicationController
     if @post.save
       redirect_to post_path(@post)
     else
-      redirect_to root_path
+      redirect_to new_post_path
     end
 
   end
 
   def edit
     @text = "Edit"
+    @post = Post.find(params[:id])
   end
-  def update
 
+  def update
+    @post = Post.find(params[:id])
+    if @post.update post_params
+      redirect_to post_path(@post)
+    else
+      redirect_to edit_post_path(@post)
+    end
   end
 
   private
