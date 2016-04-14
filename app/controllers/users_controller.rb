@@ -11,7 +11,7 @@ class UsersController < ApplicationController
     @text = "User Index"
 
     # @users = User.all.order(created_at: :desc)
-    @users = User.search(params[:search]).order(created_at: :desc)
+    @users = User.search(params[:search]).order(created_at: :desc).page(params[:page]).per(2)
   end
   # def new
   #   @text = "New"
