@@ -1,4 +1,10 @@
 class PostsController < ApplicationController
+
+  def index
+    @text = "Index"
+    @posts = Post.search(params[:search]).order(created_at: :desc).page(params[:page]).per(2)
+  end
+
   def show
     variable_name = 0
     @universal_variable_name = 0 #accessible in view and not just this def
@@ -8,13 +14,11 @@ class PostsController < ApplicationController
     @comments = @post.comments
     # binding.pry # Stops code and continues in console/terminal
   end
-  def index
-    @text = "Index"
-    @posts = Post.search(params[:search]).order(created_at: :desc).page(params[:page]).per(2)
-  end
+
   def new
     @text = "New"
   end
+
   def create
     @post = Post.new(post_params)
     if @post.save
@@ -24,7 +28,6 @@ class PostsController < ApplicationController
       redirect_to new_post_path
       flash["alert-danger"] = @post.errors.messages.map{|e| "<i class='fa fa-minus'></i> <strong>#{e.flatten.first.to_s.titleize}</strong> #{e.flatten.last}"}.join('<br />')
     end
-
   end
 
   def edit
