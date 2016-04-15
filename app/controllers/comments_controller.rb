@@ -11,7 +11,7 @@ class CommentsController < ApplicationController
       redirect_to posts_path(@comment.post)
       flash[:success] = "Successly Created Comment"
     else
-      redirect_to posts_path(@comment.post)
+      redirect_to post_path(@comment.post)
       flash["alert-danger"] = @comment.errors.messages.map{|e| "<i class='fa fa-minus'></i> <strong>#{e.flatten.first.to_s.titleize}</strong> #{e.flatten.last}"}.join('<br />')
     end
   end
