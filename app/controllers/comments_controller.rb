@@ -8,7 +8,7 @@ class CommentsController < ApplicationController
   def create
     @comment = Comment.new(comment_params)
     if @comment.save
-      redirect_to posts_path(@comment.post)
+      redirect_to post_path(@comment.post)
       flash[:success] = "Successly Created Comment"
     else
       redirect_to post_path(@comment.post)
@@ -19,6 +19,7 @@ class CommentsController < ApplicationController
   def edit
     @text = "Comment Edit"
     @comment = Comment.find(params[:id])
+    check_authorization(@comment)
   end
 
   def update
@@ -34,15 +35,36 @@ class CommentsController < ApplicationController
 
   def destroy
     @comment = Comment.find(params[:id])
-    @post = @comment.post
-    @comment.destroy
-    redirect_to post_path(@post)
-    flash[:success] = "Successly DESTROYED Comment"
+    if check_authorization(@comment)
+      @post = @comment.post
+      @comment.destroy
+      redirect_to post_path(@post)
+      flash[:success] = "Successly DESTROYED Comment"
+    end
   end
 
   private
+  #def comment_params
+  #  params.require(:comment).permit(:content, :user_id, :post_id) if params[:comment]
+  #end
+
+
   def comment_params
-    params.require(:comment).permit(:content, :user_id, :post_id) if params[:comment]
+    if params[:comment]
+      params[:comment][:user_id] = current_user.id
+      params.require(:comment).permit(:content, :user_id, :post_id)
+    end
   end
+
+  def check_authorization(comment)
+    unless comment.user == current_user #same as: if @comment.user != current_user
+      redirect_to post_path(@post)
+      flash[:alert] = "Not Authorized"
+      return false
+    else
+      return true
+    end
+  end
+
 
 end
